@@ -1,0 +1,10 @@
+{
+  "name": "Suter-sdn3lotim",
+  "description": "Game edukasi interaktif numerasi",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

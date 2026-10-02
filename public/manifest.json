@@ -1,0 +1,18 @@
+{
+  "name": "Suter - SD Negeri 3 Loloan Timur",
+  "short_name": "Suter",
+  "description": "Suter (Petualangan Matematika Berburu Harta Karun) SD Negeri 3 Loloan Timur - Game edukasi interaktif luas bangun datar",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%231d4ed8'/><text x='50' y='65' font-size='50' text-anchor='middle'>🧭</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

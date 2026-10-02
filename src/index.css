@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    /* Allow native vertical scrolling & pinch-zoom gestures on all smartphones */
+    touch-action: pan-y pinch-zoom;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    /* Ensure natural vertical touch scrolling without interception */
+    touch-action: pan-y pinch-zoom;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 100%;
+    min-height: 100dvh;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    min-height: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Fredoka', 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* Prevent iOS & Android auto-zoom when focusing inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Only clickable action buttons get touch-action manipulation to avoid 300ms click delay */
+  button, a {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+}
+
+/* Safe Area Utility */
+.safe-top {
+  padding-top: max(0.5rem, env(safe-area-inset-top));
+}
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Hide scrollbars on mobile tab bars while keeping horizontal scrolling smooth */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+@keyframes musicBar {
+  0%, 100% { height: 4px; }
+  50% { height: 12px; }
+}
+
+.animate-music-bar-1 {
+  animation: musicBar 0.5s ease-in-out infinite;
+}
+.animate-music-bar-2 {
+  animation: musicBar 0.5s ease-in-out infinite 0.17s;
+}
+.animate-music-bar-3 {
+  animation: musicBar 0.5s ease-in-out infinite 0.33s;
+}
