@@ -329,7 +329,8 @@ class GameService {
 
     const activeNonFinal = locations.filter(l => l.isActive && !l.isFinal).map(l => l.id);
     const finalLoc = locations.find(l => l.isActive && l.isFinal) || locations.find(l => l.isFinal);
-    const route = [...activeNonFinal, finalLoc ? finalLoc.id : 'pos_5'];
+    const shuffledNonFinal = shuffleArray(activeNonFinal);
+    const route = [...shuffledNonFinal, finalLoc ? finalLoc.id : 'pos_5'];
 
     const gameId = `GAME-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     const posProgress: GameSession['posProgress'] = {};

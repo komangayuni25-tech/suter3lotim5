@@ -334,7 +334,7 @@ async function startServer() {
       return res.status(400).json({ success: false, error: 'Nama pemain harus diisi!' });
     }
 
-    // 1. Identify active non-final locations and final location
+    // 1. Identify active non-final locations (Pos 1 s.d Pos 4) and final location (Pos 5 Gudang)
     const nonFinalLocs = locations.filter(l => l.isActive && !l.isFinal).map(l => l.id);
     const finalLoc = locations.find(l => l.isActive && l.isFinal) || locations.find(l => l.isFinal);
 
@@ -342,8 +342,11 @@ async function startServer() {
       return res.status(400).json({ success: false, error: 'Lokasi pos belum dikonfigurasi dengan benar.' });
     }
 
-    // 2. Sequential route: Pos 1 (Perpustakaan) -> Pos 2 (Taman) -> Pos 3 (Kelas) -> Pos 4 (Lapangan) -> Pos 5 (Gudang)
-    const route = [...nonFinalLocs, finalLoc.id];
+    // 2. Acak urutan Pos 1 sampai Pos 4 untuk setiap sesi permainan baru
+    const shuffledFirstPos = shuffleArray(nonFinalLocs);
+
+    // 3. Pos 5 (Gudang) SELALU tetap sebagai pos ke-5 dan pos akhir
+    const route = [...shuffledFirstPos, finalLoc.id];
 
     // Generate human-friendly game ID: GAME-2026-XXXX
     const randomCode = Math.floor(1000 + Math.random() * 9000);

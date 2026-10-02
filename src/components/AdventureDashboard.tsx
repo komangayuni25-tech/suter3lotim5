@@ -189,9 +189,11 @@ export const AdventureDashboard: React.FC<Props> = ({
       {/* Secret Route Progression Bar */}
       <div className="bg-white/95 rounded-2xl p-2.5 sm:p-3 border-2 border-blue-200 shadow-sm">
         <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-          <span className="text-blue-950 font-black">Rute Petualangan</span>
+          <span className="text-blue-950 font-black">Rute Petualangan (Acak)</span>
           <span className="text-[10px] text-blue-700 font-bold">
-            {session.currentPosIndex === 4 ? '⭐ Pos Harta Karun' : `Pos ${session.currentPosIndex + 1}`}
+            {session.currentPosIndex === 4
+              ? '⭐ Pos 5 (Gudang - Final)'
+              : `Langkah ${session.currentPosIndex + 1} / 5 (${currentStation.code})`}
           </span>
         </div>
 
@@ -200,6 +202,7 @@ export const AdventureDashboard: React.FC<Props> = ({
             const isCompleted = idx < session.currentPosIndex;
             const isCurrent = idx === session.currentPosIndex;
             const isFinalPos = idx === 4;
+            const loc = locations.find((l) => l.id === locId);
 
             let statusClass = 'bg-slate-100 border-slate-200 text-slate-400';
             if (isCompleted) {
@@ -210,10 +213,14 @@ export const AdventureDashboard: React.FC<Props> = ({
                 : 'bg-blue-600 border-blue-700 text-white ring-2 ring-cyan-300 ring-offset-1 font-black shadow-md shadow-blue-500/25';
             }
 
+            const stepLabel = isFinalPos ? 'Gudang' : loc?.code || `P${idx + 1}`;
+            const mobileLabel = isFinalPos ? '⭐' : loc?.code ? loc.code.replace('POS ', 'P') : `P${idx + 1}`;
+
             return (
               <div
                 key={idx}
                 className={`py-1.5 px-0.5 rounded-xl border flex flex-col items-center justify-center text-center transition-all ${statusClass}`}
+                title={`Langkah ${idx + 1}: ${loc?.name || loc?.code || ''}`}
               >
                 <div className="flex items-center justify-center gap-0.5 text-[10px] font-extrabold uppercase">
                   {isCompleted ? (
@@ -224,11 +231,11 @@ export const AdventureDashboard: React.FC<Props> = ({
                     <Lock className="w-3 h-3" />
                   )}
                   <span className="hidden sm:inline">
-                    {isFinalPos ? 'Final' : `P${idx + 1}`}
+                    {stepLabel}
                   </span>
                 </div>
                 <span className="text-[9px] sm:hidden font-black">
-                  {isFinalPos ? '⭐' : `P${idx + 1}`}
+                  {mobileLabel}
                 </span>
               </div>
             );
