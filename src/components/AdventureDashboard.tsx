@@ -45,18 +45,32 @@ export const AdventureDashboard: React.FC<Props> = ({
   onOpenHowToPlay,
   onTimeout,
 }) => {
+  const isUnlimited = !settings.durationMinutes || settings.durationMinutes <= 0;
+
   const [secondsRemaining, setSecondsRemaining] = useState<number | null>(() => {
-    if (settings.durationMinutes <= 0) return null;
-    const elapsedSeconds = Math.floor((Date.now() - session.startTime) / 1000);
-    const totalSeconds = settings.durationMinutes * 60;
-    return Math.max(0, totalSeconds - elapsedSeconds);
+    if (isUnlimited) return null;
+    const elapsed = Math.floor((Date.now() - session.startTime) / 1000);
+    const total = settings.durationMinutes * 60;
+    return Math.max(0, total - elapsed);
+  });
+
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(() => {
+    return Math.floor((Date.now() - session.startTime) / 1000);
   });
 
   const [soundEnabled, setSoundEnabled] = useState(sounds.enabled);
 
-  // Timer countdown
+  // Live stopwatch counter (always active)
   useEffect(() => {
-    if (secondsRemaining === null) return;
+    const timer = setInterval(() => {
+      setElapsedSeconds(Math.floor((Date.now() - session.startTime) / 1000));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [session.startTime]);
+
+  // Countdown timer (only active if durationMinutes > 0)
+  useEffect(() => {
+    if (isUnlimited || secondsRemaining === null) return;
     if (secondsRemaining <= 0) {
       onTimeout();
       return;
@@ -75,7 +89,7 @@ export const AdventureDashboard: React.FC<Props> = ({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [secondsRemaining, onTimeout]);
+  }, [isUnlimited, secondsRemaining, onTimeout]);
 
   const toggleSound = () => {
     sounds.enabled = !sounds.enabled;
@@ -84,10 +98,14 @@ export const AdventureDashboard: React.FC<Props> = ({
     if (sounds.enabled) sounds.playClick();
   };
 
-  const formatTimer = (totalSecs: number | null) => {
-    if (totalSecs === null) return '∞ Bebas';
-    const m = Math.floor(totalSecs / 60);
-    const s = totalSecs % 60;
+  const formatTimer = () => {
+    if (isUnlimited || secondsRemaining === null) {
+      const m = Math.floor(elapsedSeconds / 60);
+      const s = elapsedSeconds % 60;
+      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+    const m = Math.floor(secondsRemaining / 60);
+    const s = secondsRemaining % 60;
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
@@ -168,19 +186,25 @@ export const AdventureDashboard: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Timer */}
+          {/* Timer / Stopwatch */}
           <div
             className={`flex flex-col items-center justify-center py-1.5 sm:py-2 px-1 rounded-xl border shadow-2xs ${
-              secondsRemaining !== null && secondsRemaining < 300
+              !isUnlimited && secondsRemaining !== null && secondsRemaining < 300
                 ? 'bg-rose-50 border-rose-300 text-rose-700 animate-pulse'
                 : 'bg-blue-50/80 border-blue-200 text-blue-950'
             }`}
           >
             <div className="flex items-center gap-1 text-[9px] sm:text-[10px] font-extrabold uppercase">
-              <Clock className="w-3 h-3 text-blue-600" /> Waktu
+              <Clock className="w-3 h-3 text-blue-600" />
+              <span>{isUnlimited ? 'Waktu' : 'Sisa Waktu'}</span>
             </div>
-            <div className="text-sm sm:text-base font-black font-mono leading-tight">
-              {formatTimer(secondsRemaining)}
+            <div className="text-sm sm:text-base font-black font-mono leading-tight flex items-center gap-1">
+              <span>{formatTimer()}</span>
+              {isUnlimited && (
+                <span className="text-[8px] font-black px-1 py-0.2 bg-emerald-100 text-emerald-800 rounded">
+                  Bebas
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -189,11 +213,11 @@ export const AdventureDashboard: React.FC<Props> = ({
       {/* Secret Route Progression Bar */}
       <div className="bg-white/95 rounded-2xl p-2.5 sm:p-3 border-2 border-blue-200 shadow-sm">
         <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-          <span className="text-blue-950 font-black">Rute Petualangan (Acak)</span>
+          <span className="text-blue-950 font-black">Tahapan Petualangan</span>
           <span className="text-[10px] text-blue-700 font-bold">
             {session.currentPosIndex === 4
-              ? '⭐ Pos 5 (Gudang - Final)'
-              : `Langkah ${session.currentPosIndex + 1} / 5 (${currentStation.code})`}
+              ? '⭐ Pos 5: Harta Karun'
+              : `Langkah ${session.currentPosIndex + 1} dari 5`}
           </span>
         </div>
 
@@ -202,7 +226,6 @@ export const AdventureDashboard: React.FC<Props> = ({
             const isCompleted = idx < session.currentPosIndex;
             const isCurrent = idx === session.currentPosIndex;
             const isFinalPos = idx === 4;
-            const loc = locations.find((l) => l.id === locId);
 
             let statusClass = 'bg-slate-100 border-slate-200 text-slate-400';
             if (isCompleted) {
@@ -213,14 +236,14 @@ export const AdventureDashboard: React.FC<Props> = ({
                 : 'bg-blue-600 border-blue-700 text-white ring-2 ring-cyan-300 ring-offset-1 font-black shadow-md shadow-blue-500/25';
             }
 
-            const stepLabel = isFinalPos ? 'Gudang' : loc?.code || `P${idx + 1}`;
-            const mobileLabel = isFinalPos ? '⭐' : loc?.code ? loc.code.replace('POS ', 'P') : `P${idx + 1}`;
+            const stepLabel = isFinalPos ? 'Final' : `Langkah ${idx + 1}`;
+            const mobileLabel = isFinalPos ? '⭐' : `L${idx + 1}`;
 
             return (
               <div
                 key={idx}
                 className={`py-1.5 px-0.5 rounded-xl border flex flex-col items-center justify-center text-center transition-all ${statusClass}`}
-                title={`Langkah ${idx + 1}: ${loc?.name || loc?.code || ''}`}
+                title={isFinalPos ? 'Pos 5: Tantangan Harta Karun' : `Langkah ${idx + 1} dari 5`}
               >
                 <div className="flex items-center justify-center gap-0.5 text-[10px] font-extrabold uppercase">
                   {isCompleted ? (
@@ -251,10 +274,10 @@ export const AdventureDashboard: React.FC<Props> = ({
               <span className="p-1.5 sm:p-2 bg-white/20 rounded-xl text-lg sm:text-xl backdrop-blur-xs">🧭</span>
               <div>
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-cyan-200">
-                  MISI POS AKTIF #{currentStation.posNumber}
+                  MISI TAHAP #{currentStation.posNumber} DARI 5
                 </span>
                 <h3 className="text-base sm:text-xl font-black font-display tracking-wide text-white">
-                  {currentStation.code}
+                  {currentStation.isFinal ? 'Tantangan Terakhir: Peti Emas' : `Teka-Teki Menuju Pos Berikutnya`}
                 </h3>
               </div>
             </div>
@@ -270,14 +293,12 @@ export const AdventureDashboard: React.FC<Props> = ({
           <div className="bg-white/95 text-slate-800 rounded-2xl p-3 sm:p-3.5 shadow-inner space-y-2 border-2 border-blue-300">
             <div className="flex items-center gap-1 text-[11px] font-bold text-blue-900 uppercase tracking-wider">
               <Compass className="w-3.5 h-3.5 text-blue-600" />
-              <span>Petunjuk Lokasi (Teka-Teki):</span>
+              <span>Petunjuk Misteri:</span>
             </div>
 
-            {currentStation.name && (
-              <div className="text-xs sm:text-sm font-extrabold text-blue-950">
-                📍 Lokasi Tujuan: <span className="underline decoration-cyan-400">{currentStation.name}</span>
-              </div>
-            )}
+            <div className="text-xs sm:text-sm font-extrabold text-blue-950 flex items-center gap-1.5">
+              <span>🔍</span> <span>Pecahkan teka-teki berikut untuk menemukan tempatnya:</span>
+            </div>
 
             <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-relaxed italic bg-blue-50/70 p-2.5 sm:p-3 rounded-xl border border-blue-200 shadow-2xs">
               &ldquo;{currentStation.hint}&rdquo;

@@ -114,7 +114,19 @@ class GameService {
       // fallback
     }
     const saved = localStorage.getItem(LOCAL_SETTINGS_KEY);
-    return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.durationMinutes === 45) {
+          parsed.durationMinutes = 0;
+          localStorage.setItem(LOCAL_SETTINGS_KEY, JSON.stringify(parsed));
+        }
+        return parsed;
+      } catch {
+        // fallback
+      }
+    }
+    return DEFAULT_SETTINGS;
   }
 
   // Update Settings
@@ -159,7 +171,8 @@ class GameService {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
           const hasGudang = parsed.some((l: any) => l.name?.toLowerCase().includes('gudang') || l.id === 'pos_5');
-          if (!hasGudang) {
+          const hasOldHints = parsed.some((l: any) => l.hint?.toLowerCase().includes('perpustakaan') || l.hint?.toLowerCase().includes('gudang') || l.hint?.includes('Aku dipenuhi'));
+          if (!hasGudang || hasOldHints) {
             localStorage.setItem(LOCAL_LOCATIONS_KEY, JSON.stringify(DEFAULT_LOCATIONS));
             return DEFAULT_LOCATIONS;
           }

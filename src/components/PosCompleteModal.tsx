@@ -46,21 +46,15 @@ export const PosCompleteModal: React.FC<Props> = ({
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-2xl p-3 text-left shadow-inner mb-4">
           <div className="flex items-center gap-1.5 mb-1.5 text-blue-900 font-bold text-[11px] uppercase tracking-wider">
             <Compass className="w-3.5 h-3.5 text-blue-600 animate-spin-slow" />
-            <span>Petunjuk Menuju {nextStation.code}:</span>
+            <span>Petunjuk Misteri Pos Berikutnya:</span>
           </div>
-
-          {nextStation.name && (
-            <div className="text-xs sm:text-sm font-extrabold text-blue-950 mb-1">
-              📍 Lokasi: {nextStation.name}
-            </div>
-          )}
 
           <div className="bg-white/95 p-3 rounded-xl border border-blue-200 text-slate-800 text-xs sm:text-sm font-medium leading-relaxed italic shadow-2xs">
             &ldquo;{nextStation.hint}&rdquo;
           </div>
 
           <p className="text-[10px] text-slate-500 mt-1.5 text-center">
-            Pergilah ke lokasi tersebut dan cari QR Code rahasia berikutnya!
+            Pecahkan teka-teki di atas dan cari kartu QR Code tersembunyi!
           </p>
         </div>
 

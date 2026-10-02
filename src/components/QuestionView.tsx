@@ -134,7 +134,7 @@ export const QuestionView: React.FC<Props> = ({
           status: 'correct',
           title: '🎉 JAWABAN BENAR!',
           message: res.posCompleted
-            ? `Luar biasa! Seluruh ${totalQuestions} soal di ${stationCode} berhasil dituntaskan! (+${res.pointsAwarded} poin)`
+            ? `Luar biasa! Seluruh ${totalQuestions} soal di pos ini berhasil dituntaskan! (+${res.pointsAwarded} poin)`
             : `Hebat sekali! Jawabanmu tepat dan kamu mendapatkan +${res.pointsAwarded} poin!`,
           explanation: res.explanation,
           points: res.pointsAwarded,

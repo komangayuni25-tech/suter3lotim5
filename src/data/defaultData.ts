@@ -6,7 +6,7 @@ export const DEFAULT_LOCATIONS: LocationConfig[] = [
     code: 'POS 1',
     name: 'Perpustakaan',
     qrCode: 'MATH-POS-1-PERPUS',
-    hint: '📚 Aku dipenuhi banyak buku cerita dan ensiklopedia. Di tempat yang tenang dan penuh ilmu inilah aku berada. Temukan aku!',
+    hint: '📚 Hening beraroma kertas. Ribuan jendela dunia berjejer rapi menanti untuk kalian buka tanpa bersuara.',
     isFinal: false,
     isActive: true,
     iconName: 'BookOpen',
@@ -16,7 +16,7 @@ export const DEFAULT_LOCATIONS: LocationConfig[] = [
     code: 'POS 2',
     name: 'Taman Sekolah',
     qrCode: 'MATH-POS-2-TAMAN',
-    hint: '🌳 Aku dipenuhi tanaman hijau, pepohonan rindang, dan bunga yang indah. Carilah aku di sekitar tempat bernapas segar!',
+    hint: '🌿 Di bawah hangatnya sinar mentari, dedaunan berbisik tertiup semilir angin yang sejuk. Udara segar mengalir menyejukkan hati.',
     isFinal: false,
     isActive: true,
     iconName: 'Trees',
@@ -26,7 +26,7 @@ export const DEFAULT_LOCATIONS: LocationConfig[] = [
     code: 'POS 3',
     name: 'Ruang Kelas',
     qrCode: 'MATH-POS-3-KELAS',
-    hint: '🏫 Di tempat inilah meja dan kursi tersusun rapi tempat siswa belajar bersama guru setiap pagi. Temukan aku di ruang kelas!',
+    hint: '✏️ Papan tulis putih menatap jajaran meja dan kursi yang menanti. Di sinilah suara gurumu bergema membagikan ilmu setiap pagi.',
     isFinal: false,
     isActive: true,
     iconName: 'GraduationCap',
@@ -36,7 +36,7 @@ export const DEFAULT_LOCATIONS: LocationConfig[] = [
     code: 'POS 4',
     name: 'Lapangan',
     qrCode: 'MATH-POS-4-LAPANGAN',
-    hint: '⚽ Aku adalah arena terbuka paling luas di sekolah. Tempat anak-anak berolahraga, upacara, dan berlari gembira!',
+    hint: '🏃 Arena terbuka yang membentang di bawah birunya langit. Tempat peluit berbunyi, keringat menetes, dan langkah kaki beradu cepat!',
     isFinal: false,
     isActive: true,
     iconName: 'Trophy',
@@ -46,7 +46,7 @@ export const DEFAULT_LOCATIONS: LocationConfig[] = [
     code: 'POS 5',
     name: 'Gudang',
     qrCode: 'MATH-POS-5-GUDANG',
-    hint: '📦 Tempat menyimpan berbagai perlengkapan sekolah, perkakas, dan peralatan. Di sudut tersembunyi gudang inilah peti harta karun disembunyikan!',
+    hint: '🗝️ Pintu tertutup yang jarang diketuk. Tempat perlengkapan dan perkakas lama beristirahat dalam sepi. Di sudut tersembunyi, peti emas menantimu!',
     isFinal: true,
     isActive: true,
     iconName: 'Package',
@@ -54,7 +54,7 @@ export const DEFAULT_LOCATIONS: LocationConfig[] = [
 ];
 
 export const DEFAULT_SETTINGS: GameSettings = {
-  durationMinutes: 45,
+  durationMinutes: 0, // 0 = Tanpa batas waktu bawaan
   maxAttempts: 3,
   pointsFirstAttempt: 100,
   pointsSecondAttempt: 75,

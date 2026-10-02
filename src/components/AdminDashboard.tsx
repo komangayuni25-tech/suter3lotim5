@@ -936,11 +936,11 @@ export const AdminDashboard: React.FC<Props> = ({ onBack, onResetApp }) => {
                   }
                   className="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl font-bold text-sm"
                 >
+                  <option value={0}>Tanpa Batas Waktu (Bawaan Aplikasi)</option>
                   <option value={15}>15 Menit</option>
                   <option value={30}>30 Menit</option>
-                  <option value={45}>45 Menit (Standar)</option>
+                  <option value={45}>45 Menit</option>
                   <option value={60}>60 Menit</option>
-                  <option value={0}>Tanpa Batas Waktu (Bebas)</option>
                 </select>
               </div>
 

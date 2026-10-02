@@ -40,14 +40,8 @@ export const FinalPosIntroModal: React.FC<Props> = ({
         <div className="bg-white/10 border-2 border-cyan-400/40 rounded-2xl p-3 text-left backdrop-blur-xs mb-4 shadow-inner">
           <div className="flex items-center gap-1.5 mb-1.5 text-cyan-300 font-extrabold text-[11px] uppercase tracking-wider">
             <MapPin className="w-3.5 h-3.5 text-cyan-300" />
-            <span>Petunjuk Lokasi Harta Karun:</span>
+            <span>Petunjuk Misteri Peti Harta Karun:</span>
           </div>
-
-          {finalLocationName && (
-            <div className="text-xs sm:text-sm font-extrabold text-white mb-1">
-              📍 {finalLocationName}
-            </div>
-          )}
 
           <div className="bg-blue-950/60 p-3 rounded-xl border border-blue-400/30 text-blue-100 text-xs sm:text-sm font-medium leading-relaxed italic">
             &ldquo;{finalHint}&rdquo;
